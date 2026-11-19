@@ -1,59 +1,78 @@
 [project]
-name = "darbiadev-fedex"
-version = "0.3.0"
-description = "A wrapper for FedEx's API"
+name = "tailstory-fedex"
+version = "0.4.0"
+description = "FedEx API SDK"
 authors = [
-    { name = "Bradley Reynolds", email = "bradley.reynolds@darbia.dev" },
+    { name = "Bradley Reynolds", email = "bradley.reynolds@tailstory.dev" },
 ]
-license = { text = "MIT" }
 readme = "README.md"
-requires-python = ">=3.11,<3.13"
-dynamic = ["dependencies", "optional-dependencies"]
+license = "MIT"
+requires-python = ">=3.14"
+dependencies = ["niquests>=3.19.1", "xmltodict>=1.0.4"]
 
 [project.urls]
-repository = "https://github.com/darbiadev/darbiadev-fedex"
-documentation = "https://docs.darbia.dev/darbiadev-fedex/"
+repository = "https://github.com/tailstory/fedex-sdk"
+documentation = "https://docs.tailstory.dev/fedex-sdk/"
 
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build"]
+build-backend = "uv_build"
 
-[tool.setuptools.dynamic.dependencies]
-file = ["requirements/requirements.txt"]
+[dependency-groups]
+dev = [
+    "nox>=2026.7.11",
+    "prek>=0.4.11",
+    "ruff>=0.16.0",
+    "mypy>=2.3.0",
+    "types-xmltodict>=1.0.1",
+]
+docs = [
+    "sphinx>=8.1.0",
+    # Theme
+    "furo>=2025.12.19",
+    # Extensions
+    "sphinx-autoapi>=3.8.0",
+    "releases>=2.1.1",
+]
+tests = [
+    "coverage>=7.15.2",
+    "pytest>=9.1.1",
+    # Extensions
+    "pytest-randomly>=4.0.1",
+]
 
-[tool.setuptools.dynamic.optional-dependencies]
-dev = { file = ["requirements/requirements-dev.txt"] }
-tests = { file = ["requirements/requirements-tests.txt"] }
-docs = { file = ["requirements/requirements-docs.txt"] }
+[tool.uv]
+exclude-newer = "P7D"
 
-[tool.sphinx]
-copyright = "Darbia"
-author = "Bradley Reynolds"
-api_dir = "darbiadev_fedex"
+[tool.uv.build-backend]
+module-name = "fedex_sdk"
 
 [tool.ruff]
-preview = true
-unsafe-fixes = true
-target-version = "py311"
-select = ["ALL"]
+target-version = "py314"
 line-length = 120
+
+[tool.ruff.lint]
+select = ["ALL"]
 ignore = [
-    "CPY001" # (Missing copyright notice at top of file) - No license
+    "CPY001", # (Missing copyright notice at top of file) - No license
 ]
 
-[tool.ruff.extend-per-file-ignores]
+[tool.ruff.lint.extend-per-file-ignores]
 "docs/*" = [
-    "INP001", # (File `tests/*.py` is part of an implicit namespace package. Add an `__init__.py`.) - Docs are not modules
+    "INP001", # (File `docs/conf.py` is part of an implicit namespace package. Add an `__init__.py`.) - Docs are not modules
 ]
 "tests/*" = [
-    "INP001", # (File `tests/*.py` is part of an implicit namespace package. Add an `__init__.py`.) - Tests are not modules
     "S101", # (Use of `assert` detected) - Yes, that's the point
 ]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.isort]
+known-first-party = ["fedex_sdk"]
+
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
 [tool.coverage.run]
-source = [
-    "darbiadev_fedex",
-]
+source = ["fedex_sdk"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers"
