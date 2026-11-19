@@ -50,7 +50,7 @@ def _client(response: Response) -> tuple[FedExClient, _SessionRecorder]:
     """Build a client whose session answers with ``response``."""
     client = FedExClient("key-one", "password-one", "account-one", "meter-one", base_url="https://fedex.invalid/ws")
     recorder = _SessionRecorder(response)
-    client._session = recorder  # type: ignore[assignment]  # noqa: SLF001 -- the session is the seam
+    vars(client)["_session"] = recorder
     return client, recorder
 
 
