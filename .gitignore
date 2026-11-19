@@ -1,15 +1,12 @@
-# IDE
-.idea
-
-# Packing
-darbiadev_fedex.egg-info
+# Packaging
 dist
-
-# Virtual environment
-venv
 
 # Cache
 __pycache__
+
+# Coverage
+.coverage
+coverage.xml
 
 # Docs
 docs/build
